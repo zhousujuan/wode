@@ -1,46 +1,152 @@
-# Getting Started with Create React App
+# React 移动端项目
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+登录&注册
 
-## Available Scripts
+## 技术选型
 
-In the project directory, you can run:
+- react
+- react-router-dom 前端路由
+- redux 状态管理
+  - react-redux
+  - redux-thunk
+  - redux-devtools-extension
+- axios 发送请求
+- antd-mobile UI 组件库
+- typescript
+- create-react-app 脚手架
 
-### `yarn start`
+## 项目目录
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- pages 放置路由组件
+- store 放置 redux 相关的内容
+- components 放置公共组件
+- api 放置请求接口函数
+- styles 放置全局样式
+- assets 放置其他公共资源：字体图标、公共图片
+- utils 放置工具方法、公共 js 模块
+- config 放置配置
+  - routes 路由配置
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 项目准备工作
 
-### `yarn test`
+### antd-mobile
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. 下载库
+   `yarn add antd-mobile`
 
-### `yarn build`
+2. 引入样式
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- 在 index.tsx 中引入全局样式
+  `import 'antd-mobile/dist/antd-mobile.less'`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. 自定义主题
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- 下载库
+  `yarn add @craco/craco craco-less -D`
+- 修改 package.json 中的 scripts，启动项目指令
+  `react-scripts --> craco`
+- 在项目根目录定义一个配置文件: craco.config.js
 
-### `yarn eject`
+```js
+const CracoLessPlugin = require("craco-less");
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+module.exports = {
+  plugins: [
+    {
+      plugin: CracoLessPlugin,
+      options: {
+        lessLoaderOptions: {
+          lessOptions: {
+            // https://mobile.ant.design/docs/react/customize-theme-cn
+            // pc端和移动端库less变量不一样
+            modifyVars: { "@brand-primary": "#e94f4f" },
+            javascriptEnabled: true,
+          },
+        },
+      },
+    },
+  ],
+};
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. 测试
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- 在 App.tsx 引入 Button 组件看效果
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### 移动端适配和事件点透问题
 
-## Learn More
+1. 事件点透问题
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- 使用 fastclick 解决
+- 配置 index.html
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```html
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+/>
+<script src="https://as.alipayobjects.com/g/component/fastclick/1.0.6/fastclick.js"></script>
+<script>
+  if ("addEventListener" in document) {
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+        FastClick.attach(document.body);
+      },
+      false
+    );
+  }
+  if (!window.Promise) {
+    document.writeln(
+      '<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"' +
+        ">" +
+        "<" +
+        "/" +
+        "script>"
+    );
+  }
+</script>
+```
+
+2. 移动端适配
+
+- 使用 viewport
+
+- 下载包
+  `yarn add postcss-px-to-viewport -D`
+
+- 配置 craco.config.js
+
+```js
+const pxtoviewport = require('postcss-px-to-viewport');
+
+module.exports = {
+  ...,
+  style: {
+    postcss: {
+      plugins: [
+        // https://github.com/evrone/postcss-px-to-viewport
+        pxtoviewport({
+          unitToConvert: "px",
+          viewportWidth: 375, // 设计稿宽度
+          unitPrecision: 5,
+          propList: ["*"],
+          viewportUnit: "vw",
+          fontViewportUnit: "vw",
+          selectorBlackList: ["body"],
+          minPixelValue: 1,
+          mediaQuery: false,
+          replace: true,
+          exclude: /node_modules/,
+        }),
+      ]
+    }
+  }
+}
+```
+
+3. 测试
+
+- 设置样式 width
+- 看是否变成 vw 单位
+
