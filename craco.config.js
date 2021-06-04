@@ -20,7 +20,7 @@ module.exports = {
     },
 
   ],
-
+ 
   //移动端适配
   style: {
     postcss: {
