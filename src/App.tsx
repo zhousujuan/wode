@@ -5,7 +5,7 @@ import {Button} from 'antd-mobile'
 
 export default function App(){
   return (
-    <div>
+    <div className="app">
       App...<Button type='primary'>按钮</Button>
     </div>
   )
