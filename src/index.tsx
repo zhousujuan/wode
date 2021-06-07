@@ -5,6 +5,8 @@ import store from './store'
 import App from './App'
 
 import 'antd-mobile/dist/antd-mobile.less'
+import './styles/reset.less'
+import './styles/common.less'
 
 ReactDOM.render(
     <React.StrictMode>
