@@ -42,7 +42,9 @@ export default function PhoneRegister(props:RouteComponentProps){
     //     ]);
     // },[]); 
     
-    
+    const goCountryPicker=()=>{
+        props.history.push('/countryPicker')
+    }
 
     return (
         <div className='container'>
@@ -59,10 +61,12 @@ export default function PhoneRegister(props:RouteComponentProps){
                 {/* 上下留白 */}
                 <WhiteSpace size='xl'/>
                     <InputItem
-                        placeholder='请输入手机号' clear>
+                        placeholder='请输入手机号' clear className='phone-register-input'>
                             {/* clear清空功能 */}
-                            <div className='phone-prefix'>
-                                <span>+86</span>
+                            <div className='phone-prefix' onTouchEnd={goCountryPicker}>
+                                {/* 如果是antd-mobile的组件，组件要求绑定的事件是什么就是什么
+                                    如果是普通元素的组件，绑定的事件onTouchEnd */}
+                                <span >+86</span>
                                 <Icon className='left-icon' type='down'></Icon>    
                             </div>             
                     </InputItem>

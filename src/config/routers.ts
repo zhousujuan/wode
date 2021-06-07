@@ -7,7 +7,12 @@ import PasswordLogin from '../pages/Login/PasswordLogin'
 import CodeRegister from '../pages/Reagister/CodeRegister'
 import PasswordRegister from '../pages/Reagister/PasswordRegister'
 import PhoneRegister from '../pages/Reagister/PhoneRegister'
+
+import CountryPicker from '../components/CountryPicker'
+
 import { RouteComponentProps } from 'react-router-dom'
+
+
 
 
 //3.对这个数组的类型进行声名
@@ -38,6 +43,11 @@ const routes:RouteType[]=[
     {
         path:'/phoneRegister',
         component:PhoneRegister,
+    },
+    
+    {
+        path:'/countryPicker',
+        component:CountryPicker,
     },
 ]
 //2.默认暴露出去
